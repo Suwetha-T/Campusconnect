@@ -1,0 +1,142 @@
+<div class="page-header d-flex align-items-center justify-content-between">
+    <div>
+        <h2 class="mb-1">Department Management</h2>
+        <p class="text-muted mb-0">Overview and configuration of academic departments</p>
+    </div>
+</div>
+
+<!-- Add Department Form -->
+<div class="card p-4 mb-4">
+    <h5 class="fw-bold mb-3">
+        <i class="bi bi-building-add me-2 text-primary"></i>
+        {{ isEditMode ? 'Edit Department' : 'Add New Department' }}
+    </h5>
+
+    <div class="row g-3">
+        <div class="col-md-6">
+            <label class="form-label fw-medium">Department Name</label>
+            <input
+                class="form-control"
+                placeholder="e.g. Computer Science & Engineering"
+                [(ngModel)]="newDepartment.name">
+        </div>
+
+        <div class="col-md-6">
+            <label class="form-label fw-medium">Department Code</label>
+            <input
+                class="form-control"
+                placeholder="e.g. CSE"
+                [(ngModel)]="newDepartment.code">
+        </div>
+
+        <div class="col-12">
+            <label class="form-label fw-medium">Description</label>
+            <textarea
+                class="form-control"
+                rows="2"
+                placeholder="Brief summary of department courses and activities"
+                [(ngModel)]="newDepartment.description">
+            </textarea>
+        </div>
+    </div>
+
+    <div class="d-flex gap-2 mt-4">
+        <button
+            class="btn btn-primary d-flex align-items-center gap-2"
+            (click)="saveDepartment()">
+            <i class="bi" [ngClass]="isEditMode ? 'bi-check-circle-fill' : 'bi-plus-circle-fill'"></i>
+            {{ isEditMode ? 'Update Department' : 'Save Department' }}
+        </button>
+
+        <button
+            *ngIf="isEditMode"
+            class="btn btn-secondary d-flex align-items-center gap-2"
+            (click)="cancelEdit()">
+            <i class="bi bi-x-circle-fill"></i>
+            Cancel
+        </button>
+    </div>
+</div>
+
+<!-- Department List -->
+<div class="card p-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="fw-bold mb-0">Department List</h5>
+
+        <div class="position-relative w-25">
+            <input
+                type="text"
+                class="form-control ps-4"
+                placeholder="Search department..."
+                [(ngModel)]="searchKeyword"
+                (ngModelChange)="searchDepartments()">
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead>
+                <tr>
+                    <th width="80">ID</th>
+                    <th>Name</th>
+                    <th>Code</th>
+                    <th>Description</th>
+                    <th width="160" class="text-end">Actions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr *ngFor="let department of departments">
+                    <td class="fw-semibold text-muted">#{{department.id}}</td>
+                    <td class="fw-medium">{{department.name}}</td>
+                    <td><span class="badge bg-primary-subtle text-primary border border-primary-subtle">{{department.code}}</span></td>
+                    <td class="text-muted">{{department.description || 'N/A'}}</td>
+                    <td class="text-end">
+                        <button
+                            class="btn btn-sm btn-outline-warning me-1"
+                            (click)="editDepartment(department)"
+                            title="Edit">
+                            <i class="bi bi-pencil-square"></i>
+                        </button>
+
+                        <button
+                            class="btn btn-sm btn-outline-danger"
+                            (click)="deleteDepartment(department.id!)"
+                            title="Delete">
+                            <i class="bi bi-trash-fill"></i>
+                        </button>
+                    </td>
+                </tr>
+
+                <tr *ngIf="departments.length === 0">
+                    <td colspan="5" class="text-center py-4 text-muted">
+                        <i class="bi bi-inbox fs-3 d-block mb-1"></i>
+                        No Departments Found
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center mt-3 pt-2 border-top">
+        <button
+            class="btn btn-sm btn-outline-secondary"
+            (click)="previousPage()"
+            [disabled]="currentPage === 0">
+            <i class="bi bi-chevron-left me-1"></i> Previous
+        </button>
+
+        <span class="small text-muted">
+            Page <strong>{{currentPage + 1}}</strong> of <strong>{{totalPages}}</strong>
+            &nbsp;|&nbsp;
+            Total Records: <strong>{{totalElements}}</strong>
+        </span>
+
+        <button
+            class="btn btn-sm btn-outline-secondary"
+            (click)="nextPage()"
+            [disabled]="currentPage >= totalPages - 1">
+            Next <i class="bi bi-chevron-right ms-1"></i>
+        </button>
+    </div>
+</div>

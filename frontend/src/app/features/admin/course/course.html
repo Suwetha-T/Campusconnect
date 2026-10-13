@@ -1,0 +1,220 @@
+<h2>Course Management</h2>
+
+<hr>
+
+<!-- Add / Edit Course -->
+
+<div class="card p-4 mb-4">
+
+    <h4>
+        {{ editingCourse ? 'Edit Course' : 'Add Course' }}
+    </h4>
+
+    <div *ngIf="formErrors.length > 0" class="alert alert-danger p-2 mb-3 small">
+        <div *ngFor="let err of formErrors">• {{ err }}</div>
+    </div>
+
+    <select
+        class="form-select mb-2"
+        [(ngModel)]="newCourse.departmentId">
+        <option [ngValue]="0" disabled>Select Department</option>
+        <option *ngFor="let dep of departments" [ngValue]="dep.id">
+            {{ dep.name }} (Code: {{ dep.code }})
+        </option>
+    </select>
+
+    <select
+        class="form-select mb-2"
+        [(ngModel)]="newCourse.facultyId">
+        <option [ngValue]="0" disabled>Select Faculty</option>
+        <option *ngFor="let fac of faculties" [ngValue]="fac.id">
+            {{ fac.firstName }} {{ fac.lastName }} (Emp Code: {{ fac.employeeCode }})
+        </option>
+    </select>
+
+    <input
+        class="form-control mb-2"
+        placeholder="Course Code"
+        [(ngModel)]="newCourse.code">
+
+    <input
+        class="form-control mb-2"
+        placeholder="Course Name"
+        [(ngModel)]="newCourse.name">
+
+    <textarea
+        class="form-control mb-2"
+        placeholder="Description"
+        [(ngModel)]="newCourse.description">
+    </textarea>
+
+    <input
+        class="form-control mb-2"
+        type="number"
+        placeholder="Credits"
+        [(ngModel)]="newCourse.credits">
+
+    <input
+        class="form-control mb-3"
+        type="number"
+        placeholder="Semester"
+        [(ngModel)]="newCourse.semester">
+
+    <button
+        class="btn btn-primary me-2"
+        (click)="saveCourse()">
+
+        {{ editingCourse ? 'Update Course' : 'Save Course' }}
+
+    </button>
+
+    <button
+        *ngIf="editingCourse"
+        class="btn btn-secondary"
+        (click)="resetForm()">
+
+        Cancel
+
+    </button>
+
+    <div *ngIf="formErrors.length > 0" class="alert alert-danger mt-3 mb-0 py-2 px-3">
+        <small class="fw-bold d-block mb-1"><i class="bi bi-exclamation-triangle-fill me-1"></i>Please fix the following:</small>
+        <ul class="mb-0 ps-3">
+            <li *ngFor="let err of formErrors" class="small">{{ err }}</li>
+        </ul>
+    </div>
+
+</div>
+
+<!-- Course List -->
+
+<div class="card p-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+
+        <h4>
+
+            Course List ({{ totalElements }})
+
+        </h4>
+
+        <input
+            class="form-control w-25"
+            placeholder="🔍 Search Course"
+            [(ngModel)]="searchKeyword"
+            (ngModelChange)="searchCourses()">
+
+    </div>
+
+    <table class="table table-bordered table-hover">
+
+        <thead class="table-dark">
+
+        <tr>
+
+            <th>ID</th>
+
+            <th>Code</th>
+
+            <th>Name</th>
+
+            <th>Department</th>
+
+            <th>Faculty</th>
+
+            <th>Credits</th>
+
+            <th>Semester</th>
+
+            <th width="170">Actions</th>
+
+        </tr>
+
+        </thead>
+
+        <tbody>
+
+        <tr *ngFor="let course of courses">
+
+            <td>{{ course.id }}</td>
+
+            <td>{{ course.code }}</td>
+
+            <td>{{ course.name }}</td>
+
+            <td>{{ course.departmentName }}</td>
+
+            <td>{{ course.facultyName }}</td>
+
+            <td>{{ course.credits }}</td>
+
+            <td>{{ course.semester }}</td>
+
+            <td>
+
+                <button
+                    class="btn btn-warning btn-sm me-2"
+                    (click)="editCourse(course)">
+
+                    Edit
+
+                </button>
+
+                <button
+                    class="btn btn-danger btn-sm"
+                    (click)="deleteCourse(course.id!)">
+
+                    Delete
+
+                </button>
+
+            </td>
+
+        </tr>
+
+        <tr *ngIf="courses.length === 0">
+
+            <td colspan="8" class="text-center text-danger">
+
+                No Courses Found
+
+            </td>
+
+        </tr>
+
+        </tbody>
+
+    </table>
+
+    <!-- Pagination -->
+
+    <div
+        class="d-flex justify-content-between align-items-center mt-3">
+
+        <button
+            class="btn btn-outline-primary"
+            [disabled]="currentPage === 0"
+            (click)="previousPage()">
+
+            ◀ Previous
+
+        </button>
+
+        <span>
+
+            Page {{ currentPage + 1 }} of {{ totalPages }}
+
+        </span>
+
+        <button
+            class="btn btn-outline-primary"
+            [disabled]="currentPage >= totalPages - 1"
+            (click)="nextPage()">
+
+            Next ▶
+
+        </button>
+
+    </div>
+
+</div>

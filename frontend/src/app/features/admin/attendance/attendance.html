@@ -1,0 +1,196 @@
+<h2>Attendance Management</h2>
+
+<hr>
+
+<!-- Add / Edit Attendance -->
+
+<div class="card p-4 mb-4">
+
+    <h4>
+        {{ editingAttendance ? 'Edit Attendance' : 'Mark Attendance' }}
+    </h4>
+
+    <div *ngIf="formErrors.length > 0" class="alert alert-danger p-2 mb-3 small">
+        <div *ngFor="let err of formErrors">• {{ err }}</div>
+    </div>
+
+    <select
+        class="form-control mb-3"
+        [(ngModel)]="newAttendance.studentId"
+        (ngModelChange)="onStudentSelected()">
+        <option [ngValue]="0" disabled>Select Student</option>
+        <option *ngFor="let student of studentList" [ngValue]="student.id">
+            {{ student.firstName }} {{ student.lastName }}
+        </option>
+    </select>
+
+    <select
+        class="form-control mb-3"
+        [(ngModel)]="newAttendance.courseId"
+        [disabled]="!newAttendance.studentId">
+        <option [ngValue]="0" disabled>Select Course</option>
+        <option *ngFor="let sc of studentCourseList" [ngValue]="sc.courseId">
+            {{ sc.courseName }}
+        </option>
+    </select>
+
+    <input
+        type="date"
+        class="form-control mb-3"
+        [(ngModel)]="newAttendance.attendanceDate">
+
+    <select
+        class="form-control mb-3"
+        [(ngModel)]="newAttendance.attendanceStatus">
+
+        <option value="">Select Status</option>
+
+        <option value="PRESENT">Present</option>
+<option value="ABSENT">Absent</option>
+<option value="LATE">Late</option>
+
+    </select>
+
+    <button
+        class="btn btn-primary me-2"
+        (click)="saveAttendance()">
+
+        {{ editingAttendance ? 'Update Attendance' : 'Save Attendance' }}
+
+    </button>
+
+    <button
+        *ngIf="editingAttendance"
+        class="btn btn-secondary"
+        (click)="resetForm()">
+
+        Cancel
+
+    </button>
+
+</div>
+
+<!-- Attendance List -->
+
+<div class="card p-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+
+        <h4>
+
+            Attendance List ({{ totalElements }})
+
+        </h4>
+
+        <input
+            class="form-control w-25"
+            placeholder="🔍 Search Student"
+            [(ngModel)]="searchKeyword"
+            (ngModelChange)="searchAttendance()">
+
+    </div>
+
+    <table class="table table-bordered table-hover">
+
+        <thead class="table-dark">
+
+        <tr>
+
+            <th>ID</th>
+
+            <th>Student</th>
+
+            <th>Course</th>
+
+            <th>Date</th>
+
+            <th>Status</th>
+
+            <th width="170">Actions</th>
+
+        </tr>
+
+        </thead>
+
+        <tbody>
+
+        <tr *ngFor="let attendance of attendanceList">
+
+            <td>{{ attendance.id }}</td>
+
+            <td>{{ attendance.studentName }}</td>
+
+            <td>{{ attendance.courseName }}</td>
+
+            <td>{{ attendance.attendanceDate }}</td>
+
+            <td>{{ attendance.attendanceStatus }}</td>
+
+            <td>
+
+                <button
+                    class="btn btn-warning btn-sm me-2"
+                    (click)="editAttendance(attendance)">
+
+                    Edit
+
+                </button>
+
+                <button
+                    class="btn btn-danger btn-sm"
+                    (click)="deleteAttendance(attendance.id!)">
+
+                    Delete
+
+                </button>
+
+            </td>
+
+        </tr>
+
+        <tr *ngIf="attendanceList.length === 0">
+
+            <td colspan="7" class="text-center text-danger">
+
+                No Attendance Found
+
+            </td>
+
+        </tr>
+
+        </tbody>
+
+    </table>
+
+    <!-- Pagination -->
+
+    <div
+        class="d-flex justify-content-between align-items-center mt-3">
+
+        <button
+            class="btn btn-outline-primary"
+            [disabled]="currentPage === 0"
+            (click)="previousPage()">
+
+            ◀ Previous
+
+        </button>
+
+        <span>
+
+            Page {{ currentPage + 1 }} of {{ totalPages }}
+
+        </span>
+
+        <button
+            class="btn btn-outline-primary"
+            [disabled]="currentPage >= totalPages - 1"
+            (click)="nextPage()">
+
+            Next ▶
+
+        </button>
+
+    </div>
+
+</div>

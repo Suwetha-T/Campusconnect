@@ -1,0 +1,26 @@
+<div class="container mt-4">
+  <h2>My Courses</h2>
+  <div class="card shadow mt-4">
+    <div class="card-body">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Course ID</th>
+            <th>Enrollment Date</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let course of coursesList">
+            <td>{{ course.courseId }}</td>
+            <td>{{ course.enrollmentDate }}</td>
+            <td>{{ course.enrollmentStatus }}</td>
+          </tr>
+          <tr *ngIf="coursesList.length === 0">
+            <td colspan="3" class="text-center">No enrolled courses found.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

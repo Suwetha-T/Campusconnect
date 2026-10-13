@@ -1,0 +1,117 @@
+<h2>Marks Management</h2>
+
+<hr>
+
+<div class="card p-4 mb-4">
+
+    <h4>Add Marks</h4>
+
+    <div *ngIf="formErrors.length > 0" class="alert alert-danger p-2 mb-3 small">
+        <div *ngFor="let err of formErrors">• {{ err }}</div>
+    </div>
+
+    <select
+        class="form-control mb-3"
+        [(ngModel)]="newMarks.studentId"
+        (ngModelChange)="onStudentSelected()">
+        <option [ngValue]="0" disabled>Select Student</option>
+        <option *ngFor="let student of studentList" [ngValue]="student.id">
+            {{ student.firstName }} {{ student.lastName }}
+        </option>
+    </select>
+
+    <select
+        class="form-control mb-3"
+        [(ngModel)]="newMarks.courseId"
+        [disabled]="!newMarks.studentId">
+        <option [ngValue]="0" disabled>Select Course</option>
+        <option *ngFor="let sc of studentCourseList" [ngValue]="sc.courseId">
+            {{ sc.courseName }}
+        </option>
+    </select>
+
+    <select
+        class="form-control mb-3"
+        [(ngModel)]="newMarks.examType">
+
+        <option value="">Select Exam Type</option>
+
+        <option>INTERNAL</option>
+
+        <option>MODEL</option>
+
+        <option>FINAL</option>
+
+    </select>
+
+    <input
+        type="number"
+        class="form-control mb-3"
+        placeholder="Marks Obtained"
+        [(ngModel)]="newMarks.marksObtained">
+
+    <input
+        type="number"
+        class="form-control mb-3"
+        placeholder="Maximum Marks"
+        [(ngModel)]="newMarks.maximumMarks">
+
+    <button
+        class="btn btn-primary"
+        (click)="saveMarks()">
+
+        Save Marks
+
+    </button>
+
+</div>
+
+<div class="card p-4">
+
+    <h4>Marks List</h4>
+
+    <table class="table table-bordered">
+
+        <thead>
+
+        <tr>
+
+            <th>ID</th>
+
+            <th>Student</th>
+
+            <th>Course</th>
+
+            <th>Exam Type</th>
+
+            <th>Marks</th>
+
+            <th>Maximum</th>
+
+        </tr>
+
+        </thead>
+
+        <tbody>
+
+        <tr *ngFor="let marks of marksList">
+
+            <td>{{marks.id}}</td>
+
+            <td>{{marks.studentName}}</td>
+
+            <td>{{marks.courseName}}</td>
+
+            <td>{{marks.examType}}</td>
+
+            <td>{{marks.marksObtained}}</td>
+
+            <td>{{marks.maximumMarks}}</td>
+
+        </tr>
+
+        </tbody>
+
+    </table>
+
+</div>

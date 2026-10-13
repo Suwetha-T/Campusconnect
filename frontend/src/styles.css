@@ -1,0 +1,123 @@
+/* Global Theme & Typography Design System */
+
+:root {
+  --primary-color: #4f46e5;
+  --primary-hover: #4338ca;
+  --bg-main: #f8fafc;
+  --card-bg: #ffffff;
+  --sidebar-bg: #1e1e2d;
+  --sidebar-hover: #2b2b40;
+  --sidebar-active: #4f46e5;
+  --text-main: #0f172a;
+  --text-muted: #64748b;
+  --border-color: #e2e8f0;
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Cards & Layout */
+.card {
+  border: 1px solid var(--border-color) !important;
+  border-radius: 14px !important;
+  box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05) !important;
+  background-color: var(--card-bg);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card-header {
+  background-color: transparent !important;
+  border-bottom: 1px solid var(--border-color) !important;
+  padding: 1.25rem 1.5rem !important;
+  font-weight: 600;
+}
+
+/* Form Controls */
+.form-control, .form-select {
+  border-radius: 10px !important;
+  border: 1px solid #cbd5e1 !important;
+  padding: 0.6rem 0.9rem !important;
+  font-size: 0.95rem;
+  transition: all 0.2s ease-in-out;
+}
+
+.form-control:focus, .form-select:focus {
+  border-color: var(--primary-color) !important;
+  box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.12) !important;
+}
+
+/* Buttons */
+.btn {
+  border-radius: 10px !important;
+  font-weight: 500;
+  padding: 0.55rem 1.2rem;
+  transition: all 0.2s ease;
+}
+
+.btn-primary {
+  background-color: var(--primary-color) !important;
+  border-color: var(--primary-color) !important;
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-hover) !important;
+  border-color: var(--primary-hover) !important;
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  background-color: #64748b !important;
+  border-color: #64748b !important;
+}
+
+/* Tables */
+.table {
+  vertical-align: middle;
+}
+
+.table th {
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  color: #64748b;
+  background-color: #f8fafc !important;
+  border-bottom: 2px solid var(--border-color) !important;
+  padding: 0.85rem 1rem !important;
+}
+
+.table td {
+  padding: 0.9rem 1rem !important;
+  color: #334155;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.table-hover tbody tr:hover {
+  background-color: #f1f5f9 !important;
+}
+
+/* Badges */
+.badge {
+  padding: 0.45em 0.75em !important;
+  font-weight: 600;
+  border-radius: 6px !important;
+  font-size: 0.78rem;
+}
+
+/* Page Headers */
+.page-header {
+  margin-bottom: 1.75rem;
+}
+
+.page-header h2 {
+  font-weight: 700;
+  color: #0f172a;
+  letter-spacing: -0.02em;
+  font-size: 1.6rem;
+}

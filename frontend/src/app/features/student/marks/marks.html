@@ -1,0 +1,28 @@
+<div class="container mt-4">
+  <h2>My Marks</h2>
+  <div class="card shadow mt-4">
+    <div class="card-body">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Course ID</th>
+            <th>Marks Obtained</th>
+            <th>Maximum Marks</th>
+            <th>Exam Type</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let marks of marksList">
+            <td>{{ marks.courseName }}</td>
+            <td>{{ marks.marksObtained }}</td>
+            <td>{{ marks.maximumMarks }}</td>
+            <td>{{ marks.examType }}</td>
+          </tr>
+          <tr *ngIf="marksList.length === 0">
+            <td colspan="4" class="text-center">No marks records found.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

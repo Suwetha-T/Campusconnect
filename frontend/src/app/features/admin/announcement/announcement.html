@@ -1,0 +1,146 @@
+<h2>Announcement Management</h2>
+
+<hr>
+
+<!-- Add / Edit Announcement -->
+
+<div class="card p-4 mb-4">
+
+    <h4>
+
+        {{ editingAnnouncement ? 'Edit Announcement' : 'Add Announcement' }}
+
+    </h4>
+
+    <input
+        class="form-control mb-3"
+        placeholder="Announcement Title"
+        [(ngModel)]="newAnnouncement.title">
+
+    <textarea
+        class="form-control mb-3"
+        rows="4"
+        placeholder="Announcement Content"
+        [(ngModel)]="newAnnouncement.content">
+    </textarea>
+
+    <select
+        class="form-control mb-3"
+        [(ngModel)]="newAnnouncement.target">
+
+        <option value="">Select Target</option>
+
+        <option value="ADMIN">ADMIN</option>
+
+        <option value="FACULTY">FACULTY</option>
+
+        <option value="STUDENT">STUDENT</option>
+
+        <option value="ALL">ALL</option>
+
+    </select>
+
+    <button
+        class="btn btn-primary me-2"
+        (click)="saveAnnouncement()">
+
+        {{ editingAnnouncement ? 'Update Announcement' : 'Save Announcement' }}
+
+    </button>
+
+    <button
+        *ngIf="editingAnnouncement"
+        class="btn btn-secondary"
+        (click)="resetForm()">
+
+        Cancel
+
+    </button>
+
+</div>
+
+<!-- Announcement List -->
+
+<div class="card p-4">
+
+    <h4>
+
+        Announcement List
+
+    </h4>
+
+    <table class="table table-bordered table-hover">
+
+        <thead class="table-dark">
+
+        <tr>
+
+            <th>ID</th>
+
+            <th>Title</th>
+
+            <th>Content</th>
+
+            <th>Target</th>
+
+            <th>Created By</th>
+
+            <th width="170">Actions</th>
+
+        </tr>
+
+        </thead>
+
+        <tbody>
+
+        <tr *ngFor="let announcement of announcementList">
+
+            <td>{{ announcement.id }}</td>
+
+            <td>{{ announcement.title }}</td>
+
+            <td>{{ announcement.content }}</td>
+
+            <td>{{ announcement.target }}</td>
+
+            <td>{{ announcement.createdByEmail }}</td>
+
+            <td>
+
+                <button
+                    class="btn btn-warning btn-sm me-2"
+                    (click)="editAnnouncement(announcement)">
+
+                    Edit
+
+                </button>
+
+                <button
+                    class="btn btn-danger btn-sm"
+                    (click)="deleteAnnouncement(announcement.id!)">
+
+                    Delete
+
+                </button>
+
+            </td>
+
+        </tr>
+
+        <tr *ngIf="announcementList.length === 0">
+
+            <td
+                colspan="6"
+                class="text-center text-danger">
+
+                No Announcements Found
+
+            </td>
+
+        </tr>
+
+        </tbody>
+
+    </table>
+
+</div>

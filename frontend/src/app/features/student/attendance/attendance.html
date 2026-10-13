@@ -1,0 +1,29 @@
+<div class="container mt-4">
+  <h2>My Attendance</h2>
+  <div class="card shadow mt-4">
+    <div class="card-body">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let attendance of attendanceList">
+            <td>{{ attendance.attendanceDate }}</td>
+            <td>
+              <span class="badge" 
+                    [ngClass]="{'bg-success': attendance.attendanceStatus === 'Present', 'bg-danger': attendance.attendanceStatus === 'Absent'}">
+                {{ attendance.attendanceStatus }}
+              </span>
+            </td>
+          </tr>
+          <tr *ngIf="attendanceList.length === 0">
+            <td colspan="2" class="text-center">No attendance records found.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

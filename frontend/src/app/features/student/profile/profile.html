@@ -1,0 +1,32 @@
+<div class="container mt-4">
+  <h2>My Profile</h2>
+
+  <div *ngIf="isLoading" class="mt-4">
+    <p>Loading profile...</p>
+  </div>
+
+  <div *ngIf="errorMessage" class="alert alert-danger mt-4" role="alert">
+    {{ errorMessage }}
+  </div>
+
+  <div class="card shadow mt-4" *ngIf="student">
+    <div class="card-body">
+      <div class="row mb-3">
+        <div class="col-md-3 fw-bold">First Name:</div>
+        <div class="col-md-9">{{ student.firstName }}</div>
+      </div>
+      <div class="row mb-3">
+        <div class="col-md-3 fw-bold">Last Name:</div>
+        <div class="col-md-9">{{ student.lastName }}</div>
+      </div>
+      <div class="row mb-3">
+        <div class="col-md-3 fw-bold">Email:</div>
+        <div class="col-md-9">{{ student.userEmail }}</div>
+      </div>
+      <div class="row mb-3">
+        <div class="col-md-3 fw-bold">Enrollment Number:</div>
+        <div class="col-md-9">{{ student.enrollmentNumber }}</div>
+      </div>
+    </div>
+  </div>
+</div>

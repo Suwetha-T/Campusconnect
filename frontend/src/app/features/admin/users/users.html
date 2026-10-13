@@ -1,0 +1,179 @@
+<div class="page-header d-flex align-items-center justify-content-between mb-4">
+    <div>
+        <h2 class="mb-1">User Account Management</h2>
+        <p class="text-muted mb-0">Manage login credentials, assign access roles, and update account statuses</p>
+    </div>
+</div>
+
+<!-- Add / Edit User Form -->
+<div class="card p-4 mb-4">
+    <h5 class="fw-bold mb-3">
+        <i class="bi bi-person-plus-fill me-2 text-primary"></i>
+        {{ isEditMode ? 'Edit User Credentials' : 'Create New User Account' }}
+    </h5>
+
+    <div class="row g-3">
+        <div class="col-md-4">
+            <label class="form-label fw-medium">Email Address</label>
+            <input
+                type="email"
+                class="form-control"
+                placeholder="user@example.com"
+                [(ngModel)]="newUser.email">
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label fw-medium">
+                Password
+                <span *ngIf="isEditMode" class="text-muted small fw-normal">(keep empty if unchanged)</span>
+            </label>
+            <div class="input-group">
+                <input
+                    [type]="showPassword ? 'text' : 'password'"
+                    class="form-control"
+                    placeholder="Enter password"
+                    [(ngModel)]="newUser.password">
+                <button
+                    class="btn btn-outline-secondary px-3"
+                    type="button"
+                    (click)="toggleShowPassword()">
+                    <i class="bi" [ngClass]="showPassword ? 'bi-eye-slash-fill' : 'bi-eye-fill'"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label fw-medium">System Access Role</label>
+            <select class="form-select" [(ngModel)]="newUser.role">
+                <option *ngFor="let r of roles" [value]="r">{{ r }}</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="d-flex gap-2 mt-4">
+        <button
+            class="btn btn-primary d-flex align-items-center gap-2"
+            (click)="saveUser()">
+            <i class="bi" [ngClass]="isEditMode ? 'bi-check-circle-fill' : 'bi-person-check-fill'"></i>
+            {{ isEditMode ? 'Update User' : 'Create User' }}
+        </button>
+
+        <button
+            *ngIf="isEditMode"
+            class="btn btn-secondary d-flex align-items-center gap-2"
+            (click)="cancelEdit()">
+            <i class="bi bi-x-circle-fill"></i>
+            Cancel
+        </button>
+    </div>
+</div>
+
+<!-- Users List -->
+<div class="card p-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="fw-bold mb-0">System Users</h5>
+
+        <div class="position-relative w-25">
+            <input
+                type="text"
+                class="form-control ps-4"
+                placeholder="Search user email..."
+                [(ngModel)]="searchKeyword"
+                (ngModelChange)="searchUsers()">
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead>
+                <tr>
+                    <th width="80">ID</th>
+                    <th>Email Address</th>
+                    <th>Role</th>
+                    <th>Account Status</th>
+                    <th width="200" class="text-end">Actions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr *ngFor="let user of users">
+                    <td class="fw-semibold text-muted">#{{ user.id }}</td>
+                    <td class="fw-medium">{{ user.email }}</td>
+                    <td>
+                        <span
+                            class="badge"
+                            [class.bg-danger-subtle]="user.role === 'ADMIN'"
+                            [class.text-danger]="user.role === 'ADMIN'"
+                            [class.bg-primary-subtle]="user.role === 'FACULTY'"
+                            [class.text-primary]="user.role === 'FACULTY'"
+                            [class.bg-success-subtle]="user.role === 'STUDENT'"
+                            [class.text-success]="user.role === 'STUDENT'">
+                            {{ user.role }}
+                        </span>
+                    </td>
+                    <td>
+                        <span
+                            class="badge"
+                            [class.bg-success]="user.isActive"
+                            [class.bg-secondary]="!user.isActive">
+                            {{ user.isActive ? 'Active' : 'Inactive' }}
+                        </span>
+                    </td>
+                    <td class="text-end">
+                        <button
+                            class="btn btn-sm btn-outline-warning me-1"
+                            (click)="editUser(user)"
+                            title="Edit">
+                            <i class="bi bi-pencil-square"></i>
+                        </button>
+
+                        <button
+                            class="btn btn-sm me-1"
+                            [class.btn-outline-secondary]="user.isActive"
+                            [class.btn-outline-success]="!user.isActive"
+                            (click)="toggleStatus(user)"
+                            [title]="user.isActive ? 'Deactivate' : 'Activate'">
+                            <i class="bi" [ngClass]="user.isActive ? 'bi-person-x-fill' : 'bi-person-check-fill'"></i>
+                        </button>
+
+                        <button
+                            class="btn btn-sm btn-outline-danger"
+                            (click)="deleteUser(user.id!)"
+                            title="Delete">
+                            <i class="bi bi-trash-fill"></i>
+                        </button>
+                    </td>
+                </tr>
+
+                <tr *ngIf="users.length === 0">
+                    <td colspan="5" class="text-center py-4 text-muted">
+                        <i class="bi bi-inbox fs-3 d-block mb-1"></i>
+                        No Users Found
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center mt-3 pt-2 border-top">
+        <button
+            class="btn btn-sm btn-outline-secondary"
+            (click)="previousPage()"
+            [disabled]="currentPage === 0">
+            <i class="bi bi-chevron-left me-1"></i> Previous
+        </button>
+
+        <span class="small text-muted">
+            Page <strong>{{ currentPage + 1 }}</strong> of <strong>{{ totalPages }}</strong>
+            &nbsp;|&nbsp;
+            Total Records: <strong>{{ totalElements }}</strong>
+        </span>
+
+        <button
+            class="btn btn-sm btn-outline-secondary"
+            (click)="nextPage()"
+            [disabled]="currentPage >= totalPages - 1">
+            Next <i class="bi bi-chevron-right ms-1"></i>
+        </button>
+    </div>
+</div>

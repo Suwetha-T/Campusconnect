@@ -1,0 +1,117 @@
+<div class="sidebar-container d-flex flex-column flex-shrink-0 text-white">
+    <!-- Brand Logo / Header -->
+    <div class="brand-header d-flex align-items-center gap-2 p-3 px-4">
+        <i class="bi bi-mortarboard-fill text-primary fs-3"></i>
+        <span class="fs-5 fw-bold tracking-tight">CampusConnect</span>
+    </div>
+    
+    <div class="px-3 mb-2">
+        <small class="text-uppercase text-muted fw-bold px-2" style="font-size: 0.7rem; letter-spacing: 0.08em;">Navigation</small>
+    </div>
+
+    <!-- Nav Menu -->
+    <ul class="nav nav-pills flex-column mb-auto px-2 gap-1">
+
+        <!-- Dashboard -->
+        <li class="nav-item">
+            <a class="nav-link d-flex align-items-center gap-2.5" [routerLink]="[basePath]" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                <i class="bi bi-grid-1x2-fill"></i>
+                <span>Dashboard</span>
+            </a>
+        </li>
+
+        <!-- ADMIN ONLY -->
+        <ng-container *ngIf="roleService.isAdmin()">
+            <li class="nav-item">
+                <a class="nav-link d-flex align-items-center gap-2.5" [routerLink]="['/admin', 'departments']" routerLinkActive="active">
+                    <i class="bi bi-building-gear"></i>
+                    <span>Departments</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link d-flex align-items-center gap-2.5" [routerLink]="['/admin', 'faculty']" routerLinkActive="active">
+                    <i class="bi bi-person-badge-fill"></i>
+                    <span>Faculty</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link d-flex align-items-center gap-2.5" [routerLink]="['/admin', 'courses']" routerLinkActive="active">
+                    <i class="bi bi-journal-bookmark-fill"></i>
+                    <span>Courses</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link d-flex align-items-center gap-2.5" [routerLink]="['/admin', 'users']" routerLinkActive="active">
+                    <i class="bi bi-people-fill"></i>
+                    <span>Users</span>
+                </a>
+            </li>
+        </ng-container>
+
+        <!-- ADMIN + FACULTY -->
+        <ng-container *ngIf="roleService.isAdmin() || roleService.isFaculty()">
+            <li class="nav-item">
+                <a class="nav-link d-flex align-items-center gap-2.5" [routerLink]="[basePath, 'students']" routerLinkActive="active">
+                    <i class="bi bi-person-lines-fill"></i>
+                    <span>Students</span>
+                </a>
+            </li>
+            <ng-container *ngIf="roleService.isAdmin()">
+                <li class="nav-item">
+                    <a class="nav-link d-flex align-items-center gap-2.5" [routerLink]="[basePath, 'student-courses']" routerLinkActive="active">
+                        <i class="bi bi-card-checklist"></i>
+                        <span>Enrollments</span>
+                    </a>
+                </li>
+            </ng-container>
+            <li class="nav-item">
+                <a class="nav-link d-flex align-items-center gap-2.5" [routerLink]="[basePath, 'attendance']" routerLinkActive="active">
+                    <i class="bi bi-calendar-check-fill"></i>
+                    <span>Attendance</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link d-flex align-items-center gap-2.5" [routerLink]="[basePath, 'marks']" routerLinkActive="active">
+                    <i class="bi bi-award-fill"></i>
+                    <span>Marks</span>
+                </a>
+            </li>
+        </ng-container>
+
+        <!-- STUDENT ONLY -->
+        <ng-container *ngIf="roleService.isStudent()">
+            <li class="nav-item">
+                <a class="nav-link d-flex align-items-center gap-2.5" [routerLink]="['/student', 'profile']" routerLinkActive="active">
+                    <i class="bi bi-person-circle"></i>
+                    <span>My Profile</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link d-flex align-items-center gap-2.5" [routerLink]="['/student', 'courses']" routerLinkActive="active">
+                    <i class="bi bi-book-half"></i>
+                    <span>My Courses</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link d-flex align-items-center gap-2.5" [routerLink]="['/student', 'attendance']" routerLinkActive="active">
+                    <i class="bi bi-calendar3"></i>
+                    <span>My Attendance</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link d-flex align-items-center gap-2.5" [routerLink]="['/student', 'marks']" routerLinkActive="active">
+                    <i class="bi bi-bar-chart-line-fill"></i>
+                    <span>My Marks</span>
+                </a>
+            </li>
+        </ng-container>
+
+        <!-- EVERYONE -->
+        <li class="nav-item">
+            <a class="nav-link d-flex align-items-center gap-2.5" [routerLink]="[basePath, 'announcements']" routerLinkActive="active">
+                <i class="bi bi-megaphone-fill"></i>
+                <span>Announcements</span>
+            </a>
+        </li>
+    </ul>
+</div>

@@ -1,0 +1,230 @@
+<div class="page-header d-flex align-items-center justify-content-between mb-3">
+    <div>
+        <h2 class="mb-1">Student Management</h2>
+        <p class="text-muted mb-0">Manage student profiles, enrollments, and academic info</p>
+    </div>
+</div>
+
+<!-- Compact 3-Column Add/Edit Student Form -->
+<div class="card p-3 mb-4">
+    <h5 class="fw-bold mb-3">
+        <i class="bi bi-person-plus-fill me-2 text-primary"></i>
+        {{ isEditMode ? 'Edit Student Details' : 'Add New Student' }}
+    </h5>
+
+    <div *ngIf="formErrors.length > 0" class="alert alert-danger p-2 mb-3 small">
+        <div *ngFor="let err of formErrors">• {{ err }}</div>
+    </div>
+
+    <div class="row g-2.5">
+        <div class="col-md-4">
+            <label class="form-label fw-medium small mb-1">First Name</label>
+            <input
+                class="form-control form-control-sm"
+                placeholder="First Name"
+                [(ngModel)]="newStudent.firstName">
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label fw-medium small mb-1">Last Name</label>
+            <input
+                class="form-control form-control-sm"
+                placeholder="Last Name"
+                [(ngModel)]="newStudent.lastName">
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label fw-medium small mb-1">Enrollment Number</label>
+            <input
+                class="form-control form-control-sm"
+                placeholder="e.g. STU101"
+                [(ngModel)]="newStudent.enrollmentNumber">
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label fw-medium small mb-1">User Account</label>
+            <select
+                class="form-select form-select-sm"
+                [(ngModel)]="newStudent.userId">
+                <option [ngValue]="undefined" disabled>Select User Account</option>
+                <option *ngFor="let user of users" [ngValue]="user.id">
+                    {{ user.email }}
+                </option>
+            </select>
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label fw-medium small mb-1">Department</label>
+            <select
+                class="form-select form-select-sm"
+                [(ngModel)]="newStudent.departmentId">
+                <option [ngValue]="undefined" disabled>Select Department</option>
+                <option *ngFor="let dep of departments" [ngValue]="dep.id">
+                    {{ dep.name }} (Code: {{ dep.code }})
+                </option>
+            </select>
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label fw-medium small mb-1">Phone Number</label>
+            <input
+                class="form-control form-control-sm"
+                placeholder="Phone Number"
+                [(ngModel)]="newStudent.phone">
+        </div>
+
+        <div class="col-md-3">
+            <label class="form-label fw-medium small mb-1">Gender</label>
+            <select
+                class="form-select form-select-sm"
+                [(ngModel)]="newStudent.gender">
+                <option value="">Select Gender</option>
+                <option value="MALE">Male</option>
+                <option value="FEMALE">Female</option>
+            </select>
+        </div>
+
+        <div class="col-md-3">
+            <label class="form-label fw-medium small mb-1">Date of Birth</label>
+            <input
+                type="date"
+                class="form-control form-control-sm"
+                [(ngModel)]="newStudent.dateOfBirth">
+        </div>
+
+        <div class="col-md-3">
+            <label class="form-label fw-medium small mb-1">Semester</label>
+            <input
+                type="number"
+                class="form-control form-control-sm"
+                placeholder="Semester"
+                [(ngModel)]="newStudent.semester">
+        </div>
+
+        <div class="col-md-3">
+            <label class="form-label fw-medium small mb-1">Academic Year</label>
+            <input
+                class="form-control form-control-sm"
+                placeholder="e.g. 2023-2027"
+                [(ngModel)]="newStudent.academicYear">
+        </div>
+
+        <div class="col-12">
+            <label class="form-label fw-medium small mb-1">Address</label>
+            <input
+                class="form-control form-control-sm"
+                placeholder="Residential Address"
+                [(ngModel)]="newStudent.address">
+        </div>
+    </div>
+
+    <div *ngIf="formErrors.length > 0" class="alert alert-danger mt-3 mb-0 py-2 px-3">
+        <small class="fw-bold d-block mb-1"><i class="bi bi-exclamation-triangle-fill me-1"></i>Please fix the following:</small>
+        <ul class="mb-0 ps-3">
+            <li *ngFor="let err of formErrors" class="small">{{ err }}</li>
+        </ul>
+    </div>
+
+    <div class="d-flex gap-2 mt-3">
+        <button
+            class="btn btn-primary btn-sm d-flex align-items-center gap-1.5"
+            (click)="saveStudent()">
+            <i class="bi" [ngClass]="isEditMode ? 'bi-check-circle-fill' : 'bi-person-check-fill'"></i>
+            {{ isEditMode ? 'Update Student' : 'Save Student' }}
+        </button>
+
+        <button
+            *ngIf="isEditMode"
+            class="btn btn-secondary btn-sm d-flex align-items-center gap-1.5"
+            (click)="cancelEdit()">
+            <i class="bi bi-x-circle-fill"></i>
+            Cancel
+        </button>
+    </div>
+</div>
+
+<!-- Student List Table -->
+<div class="card p-3">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="fw-bold mb-0">Student Directory</h5>
+
+        <div class="position-relative w-25">
+            <input
+                class="form-control form-control-sm ps-3"
+                placeholder="🔍 Search Student..."
+                [(ngModel)]="searchKeyword"
+                (ngModelChange)="searchStudents()">
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead>
+                <tr>
+                    <th width="60">ID</th>
+                    <th>Enrollment</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Department</th>
+                    <th>Phone</th>
+                    <th>Sem</th>
+                    <th width="140" class="text-end">Actions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr *ngFor="let student of students">
+                    <td class="fw-semibold text-muted">#{{student.id}}</td>
+                    <td><span class="badge bg-primary-subtle text-primary border border-primary-subtle">{{student.enrollmentNumber}}</span></td>
+                    <td class="fw-medium">{{student.firstName}} {{student.lastName}}</td>
+                    <td class="text-muted small">{{student.userEmail}}</td>
+                    <td>{{student.departmentName}}</td>
+                    <td class="small">{{student.phone}}</td>
+                    <td><span class="badge bg-secondary-subtle text-secondary">{{student.semester}}</span></td>
+                    <td class="text-end">
+                        <button
+                            class="btn btn-sm btn-outline-warning me-1 py-1 px-2"
+                            (click)="editStudent(student)"
+                            title="Edit">
+                            <i class="bi bi-pencil-square"></i>
+                        </button>
+
+                        <button
+                            class="btn btn-sm btn-outline-danger py-1 px-2"
+                            (click)="deleteStudent(student.id!)"
+                            title="Delete">
+                            <i class="bi bi-trash-fill"></i>
+                        </button>
+                    </td>
+                </tr>
+
+                <tr *ngIf="students.length === 0">
+                    <td colspan="8" class="text-center py-4 text-muted">
+                        <i class="bi bi-inbox fs-3 d-block mb-1"></i>
+                        No Students Found
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center mt-3 pt-2 border-top">
+        <button
+            class="btn btn-sm btn-outline-secondary"
+            (click)="previousPage()"
+            [disabled]="currentPage === 0">
+            <i class="bi bi-chevron-left me-1"></i> Previous
+        </button>
+
+        <span class="small text-muted">
+            Page <strong>{{ currentPage + 1 }}</strong> of <strong>{{ totalPages }}</strong>
+        </span>
+
+        <button
+            class="btn btn-sm btn-outline-secondary"
+            (click)="nextPage()"
+            [disabled]="currentPage >= totalPages - 1">
+            Next <i class="bi bi-chevron-right ms-1"></i>
+        </button>
+    </div>
+</div>
